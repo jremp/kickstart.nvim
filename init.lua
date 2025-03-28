@@ -107,6 +107,18 @@ vim.opt.number = true
 --  Experiment for yourself to see if you like it!
 vim.opt.relativenumber = true
 
+-- Built in spellchecker
+vim.opt.spell = true
+
+-- Convert tabs to spaces
+vim.opt.expandtab = true
+
+-- Auto-indent lines inside of block
+vim.opt.shiftwidth = 4
+
+-- Number of spaces for tab
+vim.opt.tabstop = 4
+
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
 
