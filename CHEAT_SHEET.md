@@ -1,204 +1,310 @@
-# Neovim Config Cheat Sheet
+# Neovim Keybinding Cheat Sheet
 
-Leader key: `<space>`
+**Leader key:** `<Space>` &nbsp;&nbsp;**Local leader:** `<Space>`
 
-## Core Vim
+---
 
-### Modes
+## 1. Modes (core)
 
-| Keys    | Action                           |
-| ------- | -------------------------------- |
-| `i`     | Insert before cursor             |
-| `a`     | Insert after cursor              |
-| `I`     | Insert at start of line          |
-| `A`     | Insert at end of line            |
-| `o`     | Open new line below, insert mode |
-| `O`     | Open new line above, insert mode |
-| `v`     | Visual (character) mode          |
-| `V`     | Visual line mode                 |
-| `<C-v>` | Visual block mode                |
-| `Esc`   | Return to normal mode            |
+| Key | Action |
+|---|---|
+| `i` / `a` | Insert before / after cursor |
+| `I` / `A` | Insert at start / end of line |
+| `o` / `O` | Open new line below / above |
+| `v` / `V` / `Ctrl-v` | Visual / Visual line / Visual block |
+| `R` | Replace mode |
+| `Esc` | Return to Normal mode **+ clears search highlight** (custom) |
 
-### Movement
+## 2. Movement (core)
 
-| Keys              | Action                                  |
-| ----------------- | --------------------------------------- |
-| `h j k l`         | Left / down / up / right                |
-| `w` / `b`         | Next / previous word start              |
-| `e`               | End of word                             |
-| `0` / `^`         | Start of line (col 0 / first non-blank) |
-| `$`               | End of line                             |
-| `gg` / `G`        | Top / bottom of file                    |
-| `{n}G`            | Go to line `{n}`                        |
-| `%`               | Jump to matching bracket                |
-| `{` / `}`         | Previous / next paragraph               |
-| `<C-d>` / `<C-u>` | Half page down / up                     |
+| Key | Action |
+|---|---|
+| `h j k l` | Left / Down / Up / Right |
+| `w` / `W` | Next word / WORD |
+| `b` / `B` | Previous word / WORD |
+| `e` / `E` | End of word / WORD |
+| `0` / `^` / `$` | Line start / first non-blank / line end |
+| `gg` / `G` | Top / bottom of file |
+| `{n}G` or `:n` | Go to line n |
+| `%` | Jump to matching bracket |
+| `Ctrl-d` / `Ctrl-u` | Half page down / up |
+| `Ctrl-f` / `Ctrl-b` | Full page down / up |
+| `{` / `}` | Previous / next paragraph |
+| `f{c}` / `F{c}` | Find char forward / backward |
+| `t{c}` / `T{c}` | Till char forward / backward |
+| `;` / `,` | Repeat last f/t forward / backward |
+| `*` / `#` | Search word under cursor forward / backward |
+| `m{a}` | Set mark `a` |
+| `` `{a} `` / `'{a}` | Jump to mark (exact pos / line) |
+| `Ctrl-o` / `Ctrl-i` | Back / forward in jumplist |
 
-### Editing
+## 3. Editing (core)
 
-| Keys          | Action                                    |
-| ------------- | ----------------------------------------- |
-| `x`           | Delete character under cursor             |
-| `dd`          | Delete (cut) line                         |
-| `dw`          | Delete word                               |
-| `d$`          | Delete to end of line                     |
-| `yy`          | Yank (copy) line                          |
-| `yw`          | Yank word                                 |
-| `p` / `P`     | Paste after / before cursor               |
-| `cc`          | Change (delete + insert) whole line       |
-| `cw`          | Change word                               |
-| `r{x}`        | Replace character under cursor with `{x}` |
-| `J`           | Join line below to current line           |
-| `u` / `<C-r>` | Undo / redo                               |
-| `.`           | Repeat last change                        |
+| Key | Action |
+|---|---|
+| `x` / `X` | Delete char under / before cursor |
+| `dd` / `D` | Delete line / to end of line |
+| `yy` / `Y` | Yank line |
+| `p` / `P` | Paste after / before |
+| `u` / `Ctrl-r` | Undo / Redo |
+| `.` | Repeat last change |
+| `cc` / `C` | Change line / to end of line |
+| `r{c}` | Replace single char |
+| `~` | Toggle case |
+| `J` | Join lines |
+| `>>` / `<<` | Indent / outdent line |
+| `==` / `gg=G` | Auto-indent line / whole file |
 
-### Visual mode
+> Text objects (`ciw`, `ci'`, `dap`, etc.) are handled by **mini.ai** in this config — see §15, which extends and partly replaces the vanilla versions.
 
-| Keys      | Action                      |
-| --------- | --------------------------- |
-| `d`       | Delete selection            |
-| `y`       | Yank selection              |
-| `c`       | Change selection            |
-| `>` / `<` | Indent / unindent selection |
-| `~`       | Toggle case of selection    |
+## 4. Visual Mode (core)
 
-### Search & replace
+| Key | Action |
+|---|---|
+| `d` / `y` / `c` | Delete / yank / change selection |
+| `>` / `<` | Indent / outdent selection |
+| `gv` | Reselect last visual selection |
+| `o` | Swap cursor to other end of selection |
 
-| Keys             | Action                                      |
-| ---------------- | ------------------------------------------- |
-| `/pattern`       | Search forward                              |
-| `?pattern`       | Search backward                             |
-| `n` / `N`        | Repeat search (same / opposite direction)   |
-| `*` / `#`        | Search word under cursor forward / backward |
-| `:%s/old/new/g`  | Replace all `old` with `new` in file        |
-| `:%s/old/new/gc` | Same, with confirmation per match           |
+## 5. Search, Substitute & Command-line (core)
 
-### Files & buffers
+| Key | Action |
+|---|---|
+| `/` / `?` | Search forward / backward |
+| `n` / `N` | Repeat search, same / opposite direction |
+| `:%s/old/new/g` | Substitute across file |
+| `:noh` | Clear search highlight — bound to plain `<Esc>` in this config |
+| `:w` / `:q` / `:wq` / `:x` | Write / quit / write+quit / write+quit-if-changed |
+| `:e {file}` | Edit file |
+| `:bn` / `:bp` | Next / previous buffer |
 
-| Keys / Command      | Action                 |
-| ------------------- | ---------------------- |
-| `:w`                | Save                   |
-| `:q`                | Quit                   |
-| `:wq` / `ZZ`        | Save and quit          |
-| `:q!`               | Quit without saving    |
-| `:e {file}`         | Open a file            |
-| `:bnext` / `:bprev` | Next / previous buffer |
+## 6. Windows, Splits & Buffers
 
-## Plugins
+| Key | Mode | Action | Source |
+|---|---|---|---|
+| `Ctrl-w s` / `Ctrl-w v` | n | Split horizontal / vertical | core |
+| `Ctrl-w w` | n | Cycle windows | core |
+| `Ctrl-w q` | n | Close window | core |
+| `Ctrl-h` / `Ctrl-j` / `Ctrl-k` / `Ctrl-l` | n | Move focus left/down/up/right window | custom |
+| `<leader><leader>` | n | Fuzzy-find open buffers (Telescope) | custom |
 
-| Plugin                                                                                     | Category   | Purpose                                                                                                     |
-| ------------------------------------------------------------------------------------------ | ---------- | ----------------------------------------------------------------------------------------------------------- |
-| `lazy.nvim`                                                                                | Core       | Plugin manager                                                                                              |
-| `tpope/vim-sleuth`                                                                         | Editing    | Auto-detects tabstop/shiftwidth                                                                             |
-| `windwp/nvim-autopairs`                                                                    | Editing    | Auto-closes brackets/quotes; auto-inserts `(` after confirming a function completion                        |
-| `lukas-reineke/indent-blankline.nvim` (ibl)                                                | Editing    | Indentation guide lines, incl. on blank lines                                                               |
-| `echasnovski/mini.nvim`                                                                    | Editing    | `mini.ai` (textobjects), `mini.surround`, `mini.statusline`                                                 |
-| `folke/todo-comments.nvim`                                                                 | Editing    | Highlights TODO/NOTE/etc.                                                                                   |
-| `lewis6991/gitsigns.nvim`                                                                  | Git        | Gutter signs + hunk stage/reset/preview/blame keymaps                                                       |
-| `nvim-neo-tree/neo-tree.nvim`                                                              | Files      | Sidebar file explorer                                                                                       |
-| `nvim-telescope/telescope.nvim` (+ fzf-native, ui-select, web-devicons)                    | Fuzzy find | File/grep/help/symbol search                                                                                |
-| `neovim/nvim-lspconfig` (+ mason.nvim, mason-lspconfig, mason-tool-installer, fidget.nvim) | LSP        | Language servers, install/manage, progress UI                                                               |
-| `folke/lazydev.nvim`                                                                       | LSP        | Lua LSP awareness of Neovim runtime API                                                                     |
-| `hrsh7th/nvim-cmp` (+ LuaSnip, cmp-nvim-lsp, cmp-path, cmp-nvim-lsp-signature-help)        | Completion | Autocomplete engine + sources                                                                               |
-| `stevearc/conform.nvim`                                                                    | Formatting | Format-on-save + manual format                                                                              |
-| `nvim-treesitter/nvim-treesitter`                                                          | Syntax     | Highlighting/indent                                                                                         |
-| `sainnhe/everforest`                                                                       | Theme      | Colorscheme (dark, medium)                                                                                  |
-| `mfussenegger/nvim-dap` (+ dap-ui, nvim-nio, mason-nvim-dap, dap-go)                       | Debugging  | DAP debugger, Go-focused                                                                                    |
-| `MeanderingProgrammer/render-markdown.nvim`                                                | Markdown   | In-buffer markdown rendering — sample keymaps are commented out, so none are active                         |
-| `mfussenegger/nvim-lint`                                                                   | Linting    | Runs linters (markdownlint for markdown) on `BufEnter`/`BufWritePost`/`InsertLeave`; no keybindings defined |
+## 7. Diagnostics
 
-## Keybindings
+| Key | Mode | Action |
+|---|---|---|
+| `<leader>q` | n | Send diagnostics to quickfix list |
 
-### General
+## 8. Search — Telescope
 
-| Keys         | Mode     | Action                                                 |
-| ------------ | -------- | ------------------------------------------------------ |
-| `<Esc>`      | Normal   | Clear search highlight                                 |
-| `<leader>q`  | Normal   | Open diagnostic quickfix list                          |
-| `<Esc><Esc>` | Terminal | Exit terminal mode                                     |
-| `\`          | Normal   | Reveal Neo-tree; inside the tree window, `\` closes it |
+### Your leader mappings (`<leader>s` group)
 
-### Window navigation
+| Key | Mode | Action |
+|---|---|---|
+| `<leader>sh` | n | Search help tags |
+| `<leader>sk` | n | Search keymaps |
+| `<leader>sf` | n | Find files |
+| `<leader>ss` | n | Select a Telescope picker |
+| `<leader>sw` | n, v | Grep current word |
+| `<leader>sg` | n | Live grep |
+| `<leader>sd` | n | Search diagnostics |
+| `<leader>sr` | n | Resume last search |
+| `<leader>s.` | n | Recent files (oldfiles) |
+| `<leader>sc` | n | Search commands |
+| `<leader>s/` | n | Live grep in open files |
+| `<leader>sn` | n | Search Neovim config files |
+| `<leader>/` | n | Fuzzy search current buffer |
+| `<leader><leader>` | n | Find open buffers |
 
-| Keys                                  | Action                                |
-| ------------------------------------- | ------------------------------------- |
-| `<C-h>` / `<C-j>` / `<C-k>` / `<C-l>` | Focus left / down / up / right window |
+### Inside any picker (Telescope's own defaults — not set in your lua files)
 
-### Search / Telescope (`<leader>s...`)
+| Key | Mode | Action |
+|---|---|---|
+| `Ctrl-n`/`Down`, `Ctrl-p`/`Up` | insert | Next / previous item |
+| `j` / `k`, `gg` / `G`, `H`/`M`/`L` | normal (press `Esc` first) | Navigate results |
+| `<CR>` | both | Confirm selection |
+| `Ctrl-x` / `Ctrl-v` / `Ctrl-t` | insert | Open selection in split / vsplit / new tab |
+| `Ctrl-u` / `Ctrl-d` | insert | Scroll preview up / down |
+| `Tab` | insert | Toggle selection (multi-select), move to next |
+| `Ctrl-/` (insert) or `?` (normal) | both | Show all mappings for the current picker |
 
-| Keys               | Action                            |
-| ------------------ | --------------------------------- |
-| `<leader>sh`       | Search help tags                  |
-| `<leader>sk`       | Search keymaps                    |
-| `<leader>sf`       | Search files                      |
-| `<leader>ss`       | Search built-in Telescope pickers |
-| `<leader>sw`       | Search current word               |
-| `<leader>sg`       | Live grep                         |
-| `<leader>sd`       | Search diagnostics                |
-| `<leader>sr`       | Resume last search                |
-| `<leader>s.`       | Recent files                      |
-| `<leader>s/`       | Live grep in open files           |
-| `<leader>sn`       | Search Neovim config files        |
-| `<leader><leader>` | List open buffers                 |
-| `<leader>/`        | Fuzzy search current buffer       |
+## 9. LSP (active only while a language server is attached)
 
-### LSP (buffer-local, active once a server attaches)
+| Key | Mode | Action |
+|---|---|---|
+| `grn` | n | Rename symbol |
+| `gra` | n, x | Code action |
+| `grD` | n | Go to declaration |
+| `grr` | n | Go to references (Telescope) |
+| `gri` | n | Go to implementations (Telescope) |
+| `grd` | n | Go to definition (Telescope) |
+| `grt` | n | Go to type definition |
+| `gO` | n | Document symbols (Telescope) |
+| `gW` | n | Workspace symbols (Telescope) |
+| `<leader>th` | n | Toggle inlay hints *(only if server supports it)* |
+| `Ctrl-t` | n | Jump back after going to definition (core tag-jump) |
 
-| Keys         | Mode            | Action              |
-| ------------ | --------------- | ------------------- |
-| `gd`         | Normal          | Goto definition     |
-| `gD`         | Normal          | Goto declaration    |
-| `gr`         | Normal          | Goto references     |
-| `gI`         | Normal          | Goto implementation |
-| `<leader>D`  | Normal          | Type definition     |
-| `<leader>ds` | Normal          | Document symbols    |
-| `<leader>ws` | Normal          | Workspace symbols   |
-| `<leader>rn` | Normal          | Rename              |
-| `<leader>ca` | Normal + Visual | Code action         |
-| `<leader>th` | Normal          | Toggle inlay hints  |
+## 10. Autocomplete — blink.cmp (Insert mode, `default` preset)
 
-### Formatting
+| Key | Action |
+|---|---|
+| `Ctrl-y` | Accept completion (auto-imports/expands snippet if supported) |
+| `Tab` / `Shift-Tab` | Move right/left through snippet placeholders |
+| `Ctrl-Space` | Open completion menu, or docs if menu already open |
+| `Ctrl-n` / `Ctrl-p` or `↓` / `↑` | Next / previous item |
+| `Ctrl-e` | Hide menu |
+| `Ctrl-k` | Toggle signature help |
 
-| Keys        | Action        |
-| ----------- | ------------- |
-| `<leader>f` | Format buffer |
+## 11. Formatting
 
-### Completion (insert mode)
+| Key | Mode | Action |
+|---|---|---|
+| `<leader>f` | n, v | Format buffer (conform.nvim) |
 
-| Keys              | Action                                    |
-| ----------------- | ----------------------------------------- |
-| `<C-n>` / `<C-p>` | Next / previous item                      |
-| `<C-y>`           | Confirm                                   |
-| `<C-Space>`       | Trigger completion manually               |
-| `<C-b>` / `<C-f>` | Scroll docs back/forward                  |
-| `<C-l>` / `<C-h>` | Jump forward/back in snippet placeholders |
+## 12. Package Management — Mason (`:Mason` window defaults, not set in your lua files)
 
-### Debugging (DAP)
+| Key | Action |
+|---|---|
+| `<CR>` | Expand package / toggle install log |
+| `i` | Install package under cursor |
+| `u` | Reinstall / update package under cursor |
+| `U` | Update all installed packages |
+| `c` | Check version of package under cursor |
+| `C` | Check all packages for updates |
+| `X` | Uninstall package under cursor |
+| `Ctrl-c` | Cancel installation |
+| `Ctrl-f` | Apply language filter |
+| `g?` | Toggle help |
 
-| Keys        | Action                                             |
-| ----------- | -------------------------------------------------- |
-| `<F5>`      | Start/Continue                                     |
-| `<F1>`      | Step Into                                          |
-| `<F2>`      | Step Over                                          |
-| `<F3>`      | Step Out                                           |
-| `<F7>`      | Toggle DAP UI (see last session result)            |
-| `<leader>b` | Toggle breakpoint                                  |
-| `<leader>B` | Set conditional breakpoint (prompts for condition) |
+## 13. Git — gitsigns
 
-### Git (gitsigns)
+| Key | Mode | Action |
+|---|---|---|
+| `]c` | n | Next git hunk |
+| `[c` | n | Previous git hunk |
+| `<leader>hs` | n, v | Stage hunk |
+| `<leader>hr` | n, v | Reset hunk |
+| `<leader>hS` | n | Stage buffer |
+| `<leader>hu` | n | Undo stage hunk |
+| `<leader>hR` | n | Reset buffer |
+| `<leader>hp` | n | Preview hunk |
+| `<leader>hb` | n | Blame line |
+| `<leader>hd` | n | Diff against index |
+| `<leader>hD` | n | Diff against last commit |
+| `<leader>tb` | n | Toggle current-line blame |
+| `<leader>tD` | n | Toggle inline deleted-lines preview |
 
-| Keys         | Mode            | Action                                             |
-| ------------ | --------------- | -------------------------------------------------- |
-| `]c`         | Normal          | Next hunk (falls back to native `]c` in diff mode) |
-| `[c`         | Normal          | Previous hunk (same fallback)                      |
-| `<leader>hs` | Normal + Visual | Stage hunk (visual: stage selected range)          |
-| `<leader>hr` | Normal + Visual | Reset hunk (visual: reset selected range)          |
-| `<leader>hS` | Normal          | Stage entire buffer                                |
-| `<leader>hR` | Normal          | Reset entire buffer                                |
-| `<leader>hu` | Normal          | Undo stage hunk                                    |
-| `<leader>hp` | Normal          | Preview hunk                                       |
-| `<leader>hb` | Normal          | Blame line                                         |
-| `<leader>hd` | Normal          | Diff against index                                 |
-| `<leader>hD` | Normal          | Diff against last commit                           |
-| `<leader>tb` | Normal          | Toggle current-line blame                          |
-| `<leader>tD` | Normal          | Toggle inline preview of deleted lines             |
+## 14. Debugging — DAP
+
+| Key | Mode | Action |
+|---|---|---|
+| `F5` | n | Start/continue debugging |
+| `F1` | n | Step into |
+| `F2` | n | Step over |
+| `F3` | n | Step out |
+| `F7` | n | Toggle DAP UI (view last session result) |
+| `<leader>b` | n | Toggle breakpoint |
+| `<leader>B` | n | Set conditional breakpoint (prompts for condition) |
+
+## 15. File Explorer — Neo-tree
+
+### Global (all sources — Neo-tree's own defaults, `\` is the only custom one)
+
+| Key | Action |
+|---|---|
+| `\` | Reveal current file *(custom — global keymap)* |
+| `<cr>` / double-click | Open |
+| `<esc>` | Cancel / close preview or floating window |
+| `<space>` | Toggle node (expand/collapse) |
+| `<Tab>` | Select (multi-select) |
+| `Ctrl-;` | Clear selection |
+| `Ctrl-s` | Quick-jump (press a highlighted letter to jump to that node) |
+| `P` | Toggle file preview |
+| `l` | Focus preview window |
+| `Ctrl-f` / `Ctrl-b` | Scroll preview down / up |
+| `S` / `s` / `t` | Open in split / vsplit / new tab |
+| `w` | Open with window picker |
+| `C` | Close node |
+| `z` | Close all nodes |
+| `R` | Refresh tree |
+| `a` / `A` | Add file / add directory |
+| `d` | Delete |
+| `T` | Move to trash |
+| `u` / `U` | Undo trash / restore from trash |
+| `r` | Rename |
+| `y` / `x` / `p` | Copy / cut / paste (clipboard) |
+| `Ctrl-r` | Clear clipboard |
+| `c` / `m` | Copy / move (prompts for destination) |
+| `e` | Toggle auto-expand width |
+| `q` / `\` | Close window (both work — `\` added by this config) |
+| `?` | Show help (all active mappings) |
+| `<` / `>` | Previous / next source tab |
+
+### Filesystem view — additional
+
+| Key | Action |
+|---|---|
+| `H` | Toggle hidden files |
+| `/` | Fuzzy finder (filter as you type) |
+| `D` | Fuzzy finder, directories only |
+| `#` | Fuzzy sort |
+| `f` | Filter on submit |
+| `Ctrl-x` | Clear filter |
+| `<bs>` | Navigate up a directory |
+| `.` | Set as root |
+| `[g` / `]g` | Previous / next git-modified file |
+| `i` | Show file details |
+| `b` | Rename (basename only) |
+| `o` then `c`/`d`/`g`/`m`/`n`/`s`/`t` | Order by: created / diagnostics / git / modified / name / size / type |
+
+### Git Status view (`:Neotree git_status`) — additional
+
+| Key | Action |
+|---|---|
+| `A` | Git add all |
+| `ga` | Git add file |
+| `gu` | Git unstage file |
+| `gt` | Toggle stage on file |
+| `gr` | Revert file |
+| `gU` | Undo last commit |
+| `gc` | Git commit |
+| `gp` / `gl` | Git push / pull |
+| `gg` | Commit and push |
+
+## 16. Text Objects & Surround — mini.ai / mini.surround
+
+**mini.ai** — treesitter-aware, replaces/extends vanilla text objects
+
+| Key | Action |
+|---|---|
+| `a{obj}` / `i{obj}` | Around / inside object — e.g. `aw`, `iw`, `a)`, `i"`, `at` (tag), `ip`, `ap` |
+| `aa` / `ii` | Around / inside **next** object *(custom remap of default `an`/`in`)* |
+| `al` / `il` | Around / inside **last** (previous) object *(default, unchanged)* |
+| `g[` / `g]` | Jump to left / right edge of object *(default, unchanged)* |
+
+Common object chars: brackets `()[]{}<>` (or `b` for any bracket), quotes `'` `"` `` ` `` (or `q` for any quote), `t` tag, plus word/paragraph/sentence. Full list: `:h mini.ai-textobject-builtin`.
+Examples: `dip` delete inner paragraph · `ci"` change inside quotes · `daa` delete around next object.
+
+**mini.surround**
+
+| Key | Action |
+|---|---|
+| `sa{motion/obj}{char}` | Add surrounding — e.g. `saiw)` wraps inner word in `()` |
+| `sd{char}` | Delete surrounding — e.g. `sd'` |
+| `sr{char}{char}` | Replace surrounding — e.g. `sr)'` |
+| `sf` / `sF` | Find surrounding, cursor moves to right / left edge |
+| `sh` | Highlight surrounding |
+| `sn` | Update search-scope (`n_lines`) for the next command |
+| `n`/`l` suffix | Target **next**/**last** surrounding instead of the one under cursor — e.g. `sdn)` deletes the next `)` pair |
+
+## 17. Terminal Mode
+
+| Key | Action |
+|---|---|
+| `Ctrl-\` `Ctrl-n` | Exit terminal mode (built-in) |
+| `Esc` `Esc` | Exit terminal mode (custom shortcut, terminal-dependent) |
+
+---
+
+### Note on Treesitter
+
+The `main` branch of nvim-treesitter (what this config pins to) ships **no default keymaps at all** — the old `gnn`/`grn`/`grc`/`grm` incremental-selection bindings from the legacy `master` branch were dropped in the rewrite and would need to be added manually (e.g. via a small custom function or a separate plugin) if you want that back. Same story for `render-markdown.nvim` — it only changes how markdown *displays*, it doesn't add any keymaps (e.g. no built-in checkbox-toggle binding).
