@@ -142,7 +142,7 @@ do
   end)
 
   -- Route clipboard to Windows executables only when running inside WSL
-  if vim.fn.has('wsl') == 1 then
+  if vim.fn.has 'wsl' == 1 then
     vim.g.clipboard = {
       name = 'WslClipboard',
       copy = {
@@ -732,6 +732,7 @@ do
     jdtls = {},
     jsonls = {},
     pyright = {},
+    texlab = {},
     -- sqls = {}, -- failed to install
     ts_ls = {
       init_options = {
@@ -821,10 +822,11 @@ do
     'stylua', -- Used to format Lua code
     'prettier', -- Formats web facing code
     'clang-format', -- Formats C and C++
+    'texlab',
     'vue-language-server',
     'typescript-language-server',
     'tree-sitter-cli',
-    'markdownlint'
+    'markdownlint',
   })
 
   require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -1023,6 +1025,11 @@ do
         return
       end
 
+      -- Disable syntax highlighting for LaTeX, let VimTex do that
+      if language == 'latex' then
+        return
+      end
+
       local installed_parsers = require('nvim-treesitter').get_installed 'parsers'
 
       if vim.tbl_contains(installed_parsers, language) then
@@ -1068,6 +1075,30 @@ do
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   -- require 'custom.plugins'
+
+  -- 1. Set VimTeX configuration variables FIRST
+  vim.g.vimtex_view_method = 'sioyek'
+
+  vim.g.vimtex_compiler_latexmk = {
+    options = {
+      '-verbose',
+      '-file-line-error',
+      '-synctex=1',
+      '-interaction=nonstopmode',
+      '-xelatex',
+    },
+  }
+
+  -- Detect OS and set the correct Sioyek executable path
+  if vim.fn.has 'wsl' == 1 then
+    vim.g.vimtex_view_sioyek_exe = 'sioyek.exe'
+    vim.g.vimtex_callback_progpath = 'wsl nvim'
+  elseif vim.fn.has 'mac' == 1 then
+    vim.g.vimtex_view_sioyek_exe = '/Applications/sioyek.app/Contents/MacOS/sioyek'
+  end
+
+  -- 2. Install and load VimTeX
+  vim.pack.add { gh 'lervag/vimtex' }
 end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
